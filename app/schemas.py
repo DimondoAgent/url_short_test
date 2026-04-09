@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, HttpUrl, field_serializer, field_validator
+from pydantic import BaseModel, HttpUrl, field_serializer, field_validator, ConfigDict
 
 class URL_from_client(BaseModel):
     url: HttpUrl
@@ -19,13 +19,19 @@ class URL_from_client(BaseModel):
         return value
 
 class URL_response(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
+    original_url: str
     short_id: str
     clicks: int
     created_at: datetime
 
 
+
 class URL_response_statistics(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     short_id: str
     total_clicks: int
     unique_visitors: int
@@ -35,6 +41,3 @@ class URL_response_statistics(BaseModel):
     def serialize_created_at(self, value: datetime) -> str:
         return value.isoformat()
     
-    class Config:
-        from_attributes = True
-

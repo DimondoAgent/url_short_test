@@ -30,19 +30,20 @@ def create_short_url(url_data: URL_from_client, db: Session = Depends(get_db)):
 
 @app.get('/stats/{short_id}', response_model=URL_response_statistics)
 def get_url_statistics(short_id: str, db: Session = Depends(get_db)):
-    url = crud.get_short_url(db, short_id)
+    url = crud.get_url_by_short_id(db, short_id)
     if not url:
         raise HTTPException(status_code=404, detail="URL not found")
     return URL_response_statistics(
         short_id=url.short_id,
         total_clicks=url.clicks,
-        created_at=url.created_at
+        created_at=url.created_at,
+        unique_visitors=url.clicks  # Placeholder for unique visitors, can be enhanced later
     )
 
 
 @app.get('/{short_id}')
 def redirect_to_original_url(short_id: str, db: Session = Depends(get_db)):
-    url = crud.get_short_url(db, short_id)
+    url = crud.get_url_by_short_id(db, short_id)
     if not url:
         raise HTTPException(status_code=404, detail="URL not found")
     crud.increment_clicks(db, url)

@@ -1,7 +1,17 @@
-.env
-venv/
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
+
+# Virtual env
+venv/
+.env
+
+# Testing
 .pytest_cache/
+
+# DB
 *.db
+
+# OS
+.DS_Store
